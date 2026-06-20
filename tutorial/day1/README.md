@@ -20,6 +20,68 @@ You will learn:
 - `basics.pl`: small knowledge base and list predicates.
 - `day1_tests.pl`: executable `plunit` tests.
 
+## How the Two Files Fit Together (read this first)
+
+This two-file split is the basic rhythm of the whole project — the same shape
+the real AoC days use as `src/dayNN.pl` + `test/dayNN_tests.pl`. Get it straight
+now and everything later is easier.
+
+### `basics.pl` — the knowledge base / library
+
+It **defines predicates and exports them, and runs nothing on its own.** The
+first line makes it a module:
+
+```prolog
+:- module(day1_basics, [parent/2, ancestor/2, member_of/2, sum_list_rec/2]).
+```
+
+That says "I am a module named `day1_basics`, and these four predicates (named by
+`name/arity`) are public." Everything below is just clauses — facts (`parent/2`)
+and rules (`ancestor/2`, `member_of/2`, `sum_list_rec/2`). No output, no `main`.
+It is a library sitting there waiting to be used.
+
+### `day1_tests.pl` — exercises those predicates
+
+It **loads** `basics.pl` and then **queries** its predicates, checking each gives
+the expected result. The scaffolding:
+
+```prolog
+:- begin_tests(day1_basics).   % open a named test block (plunit)
+:- use_module('./basics.pl').  % load basics.pl so its predicates are callable here
+```
+
+`use_module` is the link between the two files — it is why `parent`, `ancestor`,
+etc. are available in the test file. Then each `test(...)` is one case that poses
+a goal against a predicate:
+
+| Test | What it calls | What it checks |
+|---|---|---|
+| `parent_fact_true` | `parent(alice, bob)` | the goal **succeeds** (passing = the body proves true) |
+| `parent_fact_false`, `[fail]` | `parent(bob, alice)` | `[fail]` flips it: passes **because** the goal fails |
+| `ancestor_direct` / `_transitive` | `once(ancestor(...))` | the rule proves; `once` takes just the first proof |
+| `member_of_backtracking`, `all(...)` | `member_of(X, [10,20,30])` | collects **every** `X` via backtracking, asserts `[10,20,30]` |
+| `sum_list_rec` | `sum_list_rec([1,2,3,4], Sum)` | then `assertion(Sum == 10)` checks the bound value |
+
+```prolog
+:- end_tests(day1_basics).      % close the test block
+:- initialization(main, main).  % when run as a program, call main/1
+main(_) :- ( run_tests -> halt(0) ; halt(1) ).  % run tests; exit 0 pass / 1 fail
+```
+
+### The key idea
+
+In Prolog the precise verb is **query** (or "pose a goal"), not "call." A test
+body *is* a goal — exactly what you would type after `?-` in the REPL — and
+**a test passes when its goal can be proven true.** That is the whole trick:
+"succeeds" already means "passed," so simple cases need no assertion language.
+The fancier options (`[fail]`, `all(...)`, `assertion/1`) just constrain *what
+kind* of success counts.
+
+So:
+- **`basics.pl`** = pure logic, exports predicates, runs nothing.
+- **`day1_tests.pl`** = imports those predicates, poses goals against them, and
+  exits clean/non-zero so it doubles as a runnable check.
+
 ## Mental Model (2 minutes)
 Prolog is not "do this, then this" like Python/Rust.
 You mostly:
