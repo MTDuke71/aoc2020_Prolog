@@ -8,3 +8,6 @@ Thumbs.db
 # SWI-Prolog saved states / compiled artifacts
 *.qlf
 *.o
+
+# Puzzle inputs (AoC asks that inputs not be redistributed)
+/inputs/
