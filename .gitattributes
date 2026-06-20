@@ -1,0 +1,8 @@
+# Normalize line endings: store text as LF in the repo, check out native.
+* text=auto
+
+# Source files always LF to keep the cross-language rotation consistent.
+*.pl  text eol=lf
+*.py  text eol=lf
+*.md  text eol=lf
+*.txt text eol=lf

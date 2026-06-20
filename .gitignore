@@ -1,0 +1,10 @@
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*~
+*.swp
+.vscode/
+
+# SWI-Prolog saved states / compiled artifacts
+*.qlf
+*.o
