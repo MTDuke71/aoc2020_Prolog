@@ -535,7 +535,7 @@ Sum = 0.
 - Re-run tests: `swipl -q -s tutorial/day1/day1_tests.pl`
 
 ## Next Step
-After this feels comfortable, Day 2 should add:
-- pattern matching on more complex terms
-- cuts (`!`) and when to avoid overusing them
-- more list-processing predicates
+After this feels comfortable, Day 2 builds on recursion with:
+- head/tail pattern matching (`[H|T]`) and empty-list base cases
+- a small toolbox of recursive list predicates (length, membership, transform)
+- building result lists with `append/3` and the `( Cond -> Then ; Else )` if-then-else
