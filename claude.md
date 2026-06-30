@@ -88,8 +88,8 @@ Each solved day should include:
 3. Bench hook in `bench/main.pl` with parse/part timings when practical.
 4. Function guide at
    `Problem_Statements/days/dayNN_function_guide.md`.
-5. Python algorithm reference in `python/dayNN.py` for
-   algorithm-heavy days.
+5. Python algorithm reference in `python/dayNN.py` for every day
+   (cross-validates the Prolog answers in a second language).
 6. Summary row in `Problem_Statements/days/summary_2020.md`.
 
 ## Function guides are the durable artifact
