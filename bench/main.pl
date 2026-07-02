@@ -1,6 +1,10 @@
 :- initialization(main, main).
 
-:- use_module('../src/day00.pl').
+% Load each day without importing its predicates (every day exports the
+% same parse_input/part1/part2/solve names); bench clauses call them
+% module-qualified instead.
+:- use_module('../src/day00.pl', []).
+:- use_module('../src/day01.pl', []).
 
 % Run:  swipl bench/main.pl day00
 % Times parse / part1 / part2 for the requested day against its real input.
@@ -20,6 +24,11 @@ bench(day00, Raw) :- !,
     time_call("part1", day00:part1(Parsed, A1)),
     time_call("part2", day00:part2(Parsed, A2)),
     format("day00  part1=~w  part2=~w~n", [A1, A2]).
+bench(day01, Raw) :- !,
+    time_call("parse", day01:parse_input(Raw, Parsed)),
+    time_call("part1", day01:part1(Parsed, A1)),
+    time_call("part2", day01:part2(Parsed, A2)),
+    format("day01  part1=~w  part2=~w~n", [A1, A2]).
 bench(Day, _) :-
     format("No bench wired for ~w yet.~n", [Day]).
 
