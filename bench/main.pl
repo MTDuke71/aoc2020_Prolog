@@ -6,6 +6,7 @@
 :- use_module('../src/day00.pl', []).
 :- use_module('../src/day01.pl', []).
 :- use_module('../src/day02.pl', []).
+:- use_module('../src/day03.pl', []).
 
 % Run:  swipl bench/main.pl day00
 % Times parse / part1 / part2 for the requested day against its real input.
@@ -35,6 +36,11 @@ bench(day02, Raw) :- !,
     time_call("part1", day02:part1(Parsed, A1)),
     time_call("part2", day02:part2(Parsed, A2)),
     format("day02  part1=~w  part2=~w~n", [A1, A2]).
+bench(day03, Raw) :- !,
+    time_call("parse", day03:parse_input(Raw, Parsed)),
+    time_call("part1", day03:part1(Parsed, A1)),
+    time_call("part2", day03:part2(Parsed, A2)),
+    format("day03  part1=~w  part2=~w~n", [A1, A2]).
 bench(Day, _) :-
     format("No bench wired for ~w yet.~n", [Day]).
 
