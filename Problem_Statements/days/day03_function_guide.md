@@ -46,12 +46,12 @@ constant stack, no matter how many rows. Naming convention worth copying:
 `slope_trees_/6` is the private worker behind the clean `slope_trees/4`
 face.
 
-**3. The first explicit cut — and why it's green.** `drop/3`'s first two
-clauses end in `!`:
+**3. The first explicit cut — green, and steadfast.** `drop/3`'s first two
+clauses commit with `!` *before* touching the output argument:
 
 ```prolog
-drop(0, List, List) :- !.
-drop(_, [], []) :- !.
+drop(0, List0, List) :- !, List = List0.
+drop(_, [], List) :- !, List = [].
 drop(N, [_|Xs], Rest) :- N > 0, ...
 ```
 
@@ -64,6 +64,27 @@ dead choice point survives the call. Same determinism concern as Day 2's
 if-then-else — this is the clause-level spelling of it. (Day 1's guide
 called `once/1` "the disciplined cut"; here is the raw tool, used in the
 tamest possible way.)
+
+Why `List = List0` *after* the cut instead of the shorter head
+`drop(0, List, List) :- !.`? A cut only fires once the head has unified —
+so if the output is unified in the head and a caller arrives with it
+already bound (a test like `assertion(drop(2, [a,b,c], [c]))` does exactly
+this), a non-matching value fails the head, skips the cut, and falls
+through to clauses that were never meant for that case. The property at
+stake is **steadfastness** (O'Keefe, *The Craft of Prolog*): a predicate
+must answer the same whether you pass a fresh variable and check the
+result, or pass the expected value in directly. The classic casualty is
+
+```prolog
+max(X, Y, X) :- X >= Y, !.     % NOT steadfast:
+max(_, Y, Y).                  % max(5, 3, 3) succeeds!
+```
+
+where the bound `3` fails clause 1's head, bypasses the cut, and lets
+clause 2 declare 3 the maximum of 5 and 3. `drop/3`'s guards happen to
+make the head-unification version safe anyway, but binding after the cut
+makes that safety *local*: each clause is provably right without reading
+the others.
 
 **4. Pairs are just terms: `3-1`.** Prolog has no tuple type; the
 convention for a pair is the infix `-` functor — `3-1` *is* the term
@@ -139,8 +160,8 @@ step.
 ### `drop/3`
 
 ```prolog
-drop(0, List, List) :- !.
-drop(_, [], []) :- !.
+drop(0, List0, List) :- !, List = List0.
+drop(_, [], List) :- !, List = [].
 drop(N, [_|Xs], Rest) :- N > 0, N1 is N - 1, drop(N1, Xs, Rest).
 ```
 
@@ -149,7 +170,8 @@ clamping behavior). The second clause is the load-bearing subtlety: when
 fewer than `N` rows remain, it answers `[]` instead of failing, so a
 `Down = 2` slope that "steps past the bottom" terminates cleanly at the
 base case — precisely the statement's "until you go past the bottom of the
-map."
+map." The output unifications sit after the cuts — the steadfastness
+discipline from form 3 above.
 
 ### `slope_trees_pair/3`, `part1/2`, `part2/2`, `solve/3`
 

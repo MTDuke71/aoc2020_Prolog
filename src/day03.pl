@@ -41,8 +41,10 @@ slope_trees_([Row|Rest], Right, Down, Col, Acc0, Count) :-
 
 % drop(+N, +List, -Rest)
 % Rest is List without its first N elements ([] if List is shorter).
-drop(0, List, List) :- !.
-drop(_, [], []) :- !.
+% Output is unified after the cut (steadfastness): the cut commits on the
+% inputs alone, so a pre-bound Rest can never bypass it into later clauses.
+drop(0, List0, List) :- !, List = List0.
+drop(_, [], List) :- !, List = [].
 drop(N, [_|Xs], Rest) :-
     N > 0,
     N1 is N - 1,
