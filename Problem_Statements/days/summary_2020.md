@@ -7,3 +7,4 @@
 | 02 | ✅ | 460 | 251 | Password Philosophy; first DCG parse (`entry//1` via `dcg/basics`) into `entry/4` records, policies as predicates counted with `include/3`, XOR via if-then-else. 11/11 tests pass. |
 | 03 | ✅ | 148 | 727923200 | Toboggan Trajectory; first 2-D grid (list of char-lists), strided accumulator walk `slope_trees/4` with `mod`-wrapped columns and `drop/3` row skipping, five-slope product via `maplist`+`foldl`. 9/9 tests pass. |
 | 04 | ✅ | 250 | 158 | Passport Processing; blank-line blocks → `Key-Value` pair lists, `forall/2` required-fields check, `valid_field/1` clause-per-rule validation table (`once(phrase(...))` for heights). 10 tests + 11 forall sub-tests pass. |
+| 05 | ✅ | 888 | 522 | Binary Boarding; F/L=0, B/R=1 so each pass is a 10-bit number equal to its seat ID — `foldl` Horner-decode over a 4-fact `bit/2` table, part 1 = `max_list/2`, part 2 = sorted `gap/2` scan for the width-2 hole. 7 tests + 4 forall sub-tests pass. |
