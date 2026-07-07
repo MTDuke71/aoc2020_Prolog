@@ -226,13 +226,14 @@ Let `G` = groups (484), `p` = people per group, `k` = letters per person
 so a group costs `O(p·k)` and the whole solve is `O(total input size)` —
 linear in the file.
 
-Mean of 3,000 iterations:
+Inferences are exact and reproducible (`swipl bench/main.pl day06` reports
+the same counts every run); the times are the mean of 3,000 iterations:
 
-| Phase | Time (ms) |
-|-------|----------:|
-| parse | 1.05 |
-| part1 | 1.19 |
-| part2 | 1.06 |
+| Phase | Inferences | Time (ms) |
+|-------|-----------:|----------:|
+| parse | 13,496 | 1.05 |
+| part1 | 56,268 | 1.19 |
+| part2 | 53,462 | 1.06 |
 
 Unusually for this repo, the parts cost about as much as the parse: the
 parse only splits lines and builds small sorted sets, while each part

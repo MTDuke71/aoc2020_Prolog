@@ -245,14 +245,14 @@ Let `n` = 323 rows, `w` = 31 columns.
 - **Part 2:** five slopes — four at `Down = 1`, one at `Down = 2`, so about
   `4.5×` a single slope's row visits.
 
-Mean of 1,000 iterations (`swipl bench/main.pl day03` is the single-shot
-version):
+Inferences are exact and reproducible (`swipl bench/main.pl day03` reports
+the same counts every run); the times are the mean of 1,000 iterations:
 
-| Phase | Time (ms) |
-|-------|----------:|
-| parse | 0.132 |
-| part1 | 0.096 |
-| part2 | 0.437 |
+| Phase | Inferences | Time (ms) |
+|-------|-----------:|----------:|
+| parse | 2,677 | 0.132 |
+| part1 | 3,070 | 0.096 |
+| part2 | 16,074 | 0.437 |
 
 The part2/part1 ratio is ~4.6 — almost exactly the predicted 4.5 visit
 ratio, a small sanity check that the cost model (work ∝ rows visited) is

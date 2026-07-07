@@ -164,14 +164,15 @@ Run: `swipl -g "use_module(library(plunit)), consult('test/day00_tests.pl'), run
 - Part 2: `O(n · log Mass)` — each module's fuel chain has `O(log Mass)` steps.
 - Space: `O(n)` parsed list; `total_fuel/2` recursion depth `O(log Mass)`.
 
-Mean of 100,000 iterations each (`swipl bench/main.pl day00` does a single
-shot; these are the repeated-measure numbers):
+Inferences are exact and reproducible — a single `swipl bench/main.pl day00`
+run reports the same counts every time; the times are the mean of 100,000
+iterations (one shot is far too fast to time on its own):
 
-| Phase | Time (ms) |
-|-------|----------:|
-| parse | 0.022 |
-| part1 | 0.011 |
-| part2 | 0.148 |
+| Phase | Inferences | Time (ms) |
+|-------|-----------:|----------:|
+| parse | 1,561 | 0.022 |
+| part1 | 563 | 0.011 |
+| part2 | 5,854 | 0.148 |
 
 Calibration for the cold reader: the whole day is well under a millisecond.
 Unlike the Racket port (where parsing dominated), here **Part 2 dominates** —

@@ -173,14 +173,14 @@ Run: `swipl test/run_tests.pl` from the repo root (runs every day's suite).
   nodes, and pruning cuts well below that.
 - Space: `O(n)` for the list, `O(k)` recursion depth beyond the list walk.
 
-Mean of 10,000 iterations (`swipl bench/main.pl day01` is the single-shot
-version):
+Inferences are exact and reproducible (`swipl bench/main.pl day01` reports
+the same counts every run); the times are the mean of 10,000 iterations:
 
-| Phase | Time (ms) |
-|-------|----------:|
-| parse | 0.042 |
-| part1 | 0.189 |
-| part2 | 1.731 |
+| Phase | Inferences | Time (ms) |
+|-------|-----------:|----------:|
+| parse | 2,061 | 0.042 |
+| part1 | 9,879 | 0.189 |
+| part2 | 79,974 | 1.731 |
 
 First day where the *search* visibly dominates: part 2 is ~9× part 1, which
 tracks the extra factor of `n` in the combination count. Still under 2 ms —

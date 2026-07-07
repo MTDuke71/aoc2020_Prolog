@@ -232,14 +232,14 @@ Let `n` = 1000 lines, `m` = password length (≤ ~20).
   `Lo` and `Hi` (`nth1/3` is a list walk, `O(position)`), so typically far
   less.
 
-Mean of 1,000 iterations (`swipl bench/main.pl day02` is the single-shot
-version):
+Inferences are exact and reproducible (`swipl bench/main.pl day02` reports
+the same counts every run); the times are the mean of 1,000 iterations:
 
-| Phase | Time (ms) |
-|-------|----------:|
-| parse | 2.614 |
-| part1 | 0.839 |
-| part2 | 0.245 |
+| Phase | Inferences | Time (ms) |
+|-------|-----------:|----------:|
+| parse | 63,689 | 2.614 |
+| part1 | 36,449 | 0.839 |
+| part2 | 8,915 | 0.245 |
 
 Two reversals from Day 1 worth noticing. First, **parse now dominates** —
 grammar-per-line costs more than the arithmetic it feeds, which will be the

@@ -13,7 +13,8 @@
 :- use_module('../src/day07.pl', []).
 
 % Run:  swipl bench/main.pl day00
-% Times parse / part1 / part2 for the requested day against its real input.
+% Reports logical inferences (exact, reproducible) and wall time (noisy) for
+% parse / part1 / part2 of the requested day against its real input.
 
 main([]) :-
     format("Usage: swipl bench/main.pl <day>   e.g. day00~n").
@@ -69,10 +70,34 @@ bench(Day, _) :-
     format("No bench wired for ~w yet.~n", [Day]).
 
 % time_call(+Label, :Goal)
-% Run Goal under wall-clock timing and report milliseconds.
+% Report two numbers for Goal:
+%   - logical inferences: deterministic and machine-independent, the stable
+%     signal for comparing algorithms (same input -> same count every run);
+%   - wall milliseconds: the noisy real cost, via get_time/1 for sub-ms
+%     resolution (a single fast phase is far below statistics(walltime)'s
+%     1 ms granularity).
+% The harness's own inference cost between the two probes is measured with
+% an identical bracket around `true` and subtracted, so the reported count
+% is the goal's alone — the same correction time/1 applies internally.
 time_call(Label, Goal) :-
-    statistics(walltime, [Start|_]),
+    bench_overhead(Base),
+    statistics(inferences, I0),
+    get_time(T0),
     call(Goal),
-    statistics(walltime, [End|_]),
-    Ms is End - Start,
-    format("  ~w~t~16|~3d ms~n", [Label, Ms]).
+    get_time(T1),
+    statistics(inferences, I1),
+    Infs is I1 - I0 - Base,
+    Ms is (T1 - T0) * 1000,
+    format("  ~w~t~10|~t~D inf~26|~t~3f ms~40|~n", [Label, Infs, Ms]).
+
+% bench_overhead(-Base)
+% The inference count consumed by time_call/2's own probe bracket, measured
+% by running that exact bracket around a no-op. Self-calibrating, so no
+% magic constant and it stays correct across SWI versions.
+bench_overhead(Base) :-
+    statistics(inferences, I0),
+    get_time(_),
+    call(true),
+    get_time(_),
+    statistics(inferences, I1),
+    Base is I1 - I0.

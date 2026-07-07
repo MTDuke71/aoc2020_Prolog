@@ -234,13 +234,14 @@ Let `n` = number of passes (799), each a constant 10 characters.
 - **Part 2:** `O(n log n)` for `sort/2`, then `O(n)` for the gap scan —
   the sort dominates.
 
-Mean of 1,000 iterations:
+Inferences are exact and reproducible (`swipl bench/main.pl day05` reports
+the same counts every run); the times are the mean of 1,000 iterations:
 
-| Phase | Time (ms) |
-|-------|----------:|
-| parse | 1.200 |
-| part1 | 0.022 |
-| part2 | 0.059 |
+| Phase | Inferences | Time (ms) |
+|-------|-----------:|----------:|
+| parse | 39,575 | 1.200 |
+| part1 | 959 | 0.022 |
+| part2 | 868 | 0.059 |
 
 The familiar profile: string work in the parse (splitting 799 lines and
 folding 10 chars each) dwarfs the arithmetic parts, which are a scan and

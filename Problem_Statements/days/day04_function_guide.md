@@ -273,14 +273,14 @@ each.
 - **Part 2:** part 1's check plus `O(F)` rule applications of `O(len)`
   each — still linear in input size.
 
-Mean of 1,000 iterations (`swipl bench/main.pl day04` is the single-shot
-version):
+Inferences are exact and reproducible (`swipl bench/main.pl day04` reports
+the same counts every run); the times are the mean of 1,000 iterations:
 
-| Phase | Time (ms) |
-|-------|----------:|
-| parse | 1.340 |
-| part1 | 0.405 |
-| part2 | 1.521 |
+| Phase | Inferences | Time (ms) |
+|-------|-----------:|----------:|
+| parse | 19,054 | 1.340 |
+| part1 | 7,153 | 0.405 |
+| part2 | 37,437 | 1.521 |
 
 Day 2's profile again — string-slicing parse work dominating trivial
 logic — at a slightly larger scale. Part 2 costs ~3.8× part 1: same
