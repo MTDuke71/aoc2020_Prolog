@@ -12,6 +12,7 @@
 :- use_module('../src/day06.pl', []).
 :- use_module('../src/day07.pl', []).
 :- use_module('../src/day08.pl', []).
+:- use_module('../src/day09.pl', []).
 
 % Run:  swipl bench/main.pl day00
 % Reports logical inferences (exact, reproducible) and wall time (noisy) for
@@ -72,6 +73,11 @@ bench(day08, Raw) :- !,
     time_call("part1", day08:part1(Parsed, A1)),
     time_call("part2", day08:part2(Parsed, A2)),
     format("day08  part1=~w  part2=~w~n", [A1, A2]).
+bench(day09, Raw) :- !,
+    time_call("parse", day09:parse_input(Raw, Parsed)),
+    time_call("part1", day09:part1(Parsed, A1)),
+    time_call("part2", day09:part2(Parsed, A2)),
+    format("day09  part1=~w  part2=~w~n", [A1, A2]).
 bench(Day, _) :-
     format("No bench wired for ~w yet.~n", [Day]).
 
