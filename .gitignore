@@ -11,3 +11,5 @@ Thumbs.db
 
 # Puzzle inputs (AoC asks that inputs not be redistributed)
 /inputs/
+
+*.pyc
