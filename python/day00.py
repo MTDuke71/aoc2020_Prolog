@@ -1,8 +1,11 @@
 """Day 0: The Tyranny of the Rocket Equation (tutorial dry run).
 
-Python algorithm reference mirroring src/day00.pl. Input is one integer
-module mass per line.
+Input is one integer module mass per line.
 """
+
+from pathlib import Path
+
+INPUT = Path(__file__).resolve().parent.parent / "inputs" / "day00.txt"
 
 
 def parse_input(raw: str) -> list[int]:
@@ -37,9 +40,10 @@ def solve(raw: str) -> tuple[int, int]:
     return part1(data), part2(data)
 
 
-if __name__ == "__main__":
-    from pathlib import Path
-
-    raw = Path("inputs/day00.txt").read_text()
-    p1, p2 = solve(raw)
+def main() -> None:
+    p1, p2 = solve(INPUT.read_text())
     print(f"part1={p1} part2={p2}")
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

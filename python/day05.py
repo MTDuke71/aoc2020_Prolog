@@ -1,16 +1,21 @@
 """Day 5: Binary Boarding.
 
-Python algorithm reference mirroring src/day05.pl. Each boarding pass is
+Each boarding pass is
 a 10-bit binary number: F/L = 0 (lower half), B/R = 1 (upper half). Read
 whole, the pass equals its seat ID (Row*8 + Col). Part 1 is the highest
 ID; part 2 is the one interior gap whose neighbours are both occupied.
 """
+
+from pathlib import Path
 
 BITS = str.maketrans("FBLR", "0101")
 
 
 def seat_id(boarding_pass: str) -> int:
     return int(boarding_pass.translate(BITS), 2)
+
+
+INPUT = Path(__file__).resolve().parent.parent / "inputs" / "day05.txt"
 
 
 def parse_input(raw: str) -> list[int]:
@@ -34,9 +39,10 @@ def solve(raw: str) -> tuple[int, int]:
     return part1(ids), part2(ids)
 
 
-if __name__ == "__main__":
-    from pathlib import Path
-
-    raw = Path("inputs/day05.txt").read_text()
-    p1, p2 = solve(raw)
+def main() -> None:
+    p1, p2 = solve(INPUT.read_text())
     print(f"part1={p1} part2={p2}")
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

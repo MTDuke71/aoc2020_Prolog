@@ -1,139 +1,147 @@
-# CLAUDE.md -- AoC 2020 in Prolog
+# CLAUDE.md -- Advent of Code 2020, in Python
 
-This is **Matt LaDuke's** AoC 2020 / Prolog repo, the third leg of
-a planned language-rotation run. Use this file to orient on
-conventions, working style, and cross-repo context before helping on
-a first request in a new session.
+This is **Matt LaDuke's** AoC 2020 repo. The directory is named
+`aoc2020_Prolog` for historical reasons; see "The name" below. Read this
+file before helping on a first request in a new session.
 
-## The language rotation
+## The name
 
-| Year | Language | Repo |
-|-----:|----------|------|
-| 2017 | Rust + Python side-by-side | `../rust_study/advent_of_code/aoc2017/` |
-| 2018 | Haskell | `../aoc2018_Haskell/` |
-| 2019 | Racket | `../aoc2019_racket/` |
-| 2020 | Prolog | **this repo** |
-| 2021 | OCaml | (planned) |
-| all other years | Rust | scattered |
+The repo began as the Prolog leg of a language-rotation experiment. **That
+rotation is over** -- juggling several languages at once was not working,
+and Advent of Code itself is the point. The name is kept so existing
+clones, links and remotes keep working.
 
-**Why this rotation exists:** breadth-first language exposure across
-paradigms. The goal is reading fluency and transferable problem
-solving, not deep specialization in one language.
+Do not propose renaming the repo, and do not propose reviving the rotation.
 
-## Timeline and cadence
+## Language
 
-- Tutorial phase: 11 days.
-- AoC 2020 proper starts: **2026-07-01**.
-- Tutorial is expected to run from **2026-06-20** through
-  **2026-06-30**.
+**Python only.** Solutions live in `python/dayNN.py`.
 
-## About the user
+Every day exposes the same five names:
 
-- 20+ year engineer; senior-level depth.
-- Rust is the anchor language for comparisons.
-- Comfortable with compiler/VM and algorithmic vocabulary.
-- Workflow preference: assistant writes code, user reads and reviews.
+- `parse_input(raw) -> structure` -- the **full** parse. Not a line split
+  with the real work deferred into `part1`. If both parts need a derived
+  structure that does not depend on which part is asking, it is built here.
+- `part1(parsed) -> int`
+- `part2(parsed) -> int`
+- `solve(raw) -> (part1, part2)`
+- `main() -> None` -- reads `INPUT`, prints `part1=... part2=...`
 
-## Working style
+`INPUT` is resolved from `__file__`, not the working directory, so
+`python python/day07.py` works from anywhere.
 
-- Language-first on initial walkthroughs: focus on Prolog mechanics,
-  unification, backtracking, cuts, recursion, and data modeling.
-- Algorithm-depth on demand: if asked "why this works" or "prove it",
-  go all the way down with correctness arguments and performance tradeoffs.
-- Name algorithms in standard literature terms so techniques transfer.
-- If syntax frustration appears, pivot back to algorithmic structure.
+## The frozen Prolog tree
 
-## Project shape (target)
+`src/`, `test/`, `bench/main.pl` and `tutorial/` are **frozen**. They still
+work and are left in place, deliberately.
 
-```text
-aoc2020_Prolog/
-  tutorial/
-    day1/ ... day11/
-  src/
-    day00.pl .. day25.pl
-    common/
-  test/
-    day00_tests.pl .. day25_tests.pl
-  bench/
-    main.pl
-  Problem_Statements/
-    days/
-      dayNN.md
-      dayNN_function_guide.md
-      summary_2020.md
-  python/
-    dayNN.py
-  inputs/
-    dayNN.txt
+- Do not add new code there.
+- Do not modify what is there.
+- Do not offer to port Python solutions back into Prolog.
+- Do not delete it, including the unsolved-day stubs.
+
+`pyproject.toml` fences both ruff and pytest to `python/` so neither tool
+can wander into it.
+
+## Environment
+
+Windows, **not WSL**. Virtualenv executables are in `Scripts\`, not `bin/`.
+
+```
+python -m venv .venv
+.venv\Scripts\python.exe -m pytest
+.venv\Scripts\ruff.exe format python\
+.venv\Scripts\python.exe python\bench.py
 ```
 
-Notes:
-- Keep one main source file per day in `src/`.
-- Use SWI-Prolog as the default runtime unless explicitly changed.
-- Use `plunit` for tests.
+Inputs downloaded on Windows can carry CRLF, so parsing must tolerate a
+trailing `\r`. A per-line `.strip()` or `.splitlines()` handles it --
+`block.split("\n")` does not, and that has already caused one real bug
+(day06, where the surviving `\r` counted as a 27th customs answer). Every
+day module has a CRLF test case.
+
+## Testing
+
+`plunit` is gone with the Prolog. Tests are **pytest**, one module per
+solved day at `python/tests/test_dayNN.py`.
+
+- Statement worked examples via `@pytest.mark.parametrize`, plus the edge
+  cases the statement implies.
+- A CRLF case.
+- `LOCKED` and the `check_locked` fixture for real-input answers.
+
+`LOCKED = (part1, part2)` asserts. `LOCKED = None` reports what the code
+currently produces and skips. Never close that gap by pasting in whatever
+the code printed -- the whole point is that an unverified answer cannot
+masquerade as a verified one. A day goes green when a real accepted answer
+is entered by hand.
+
+The `real_input` fixture **skips** when a gitignored input is missing, so a
+fresh clone stays green.
+
+## Two standing rules
+
+1. **If a solution leans on a non-obvious identity or shortcut, pin it as a
+   test, not a claim in prose.** A claim no test checks is a claim that can
+   rot. Day 5 rests on "the boarding pass read as a 10-bit number *is* the
+   seat ID"; day 13 on Python's `%` being floored. Both are tests, not
+   sentences.
+2. **Anything stated as fact gets run and verified.** A timing, a language
+   behaviour, an arithmetic result -- measure it or execute it. Do not
+   recall it from memory and write it down as though it were checked.
 
 ## Per-day deliverable
 
-Each solved day should include:
-
-1. Source file in `src/dayNN.pl` with clear predicate contracts in comments,
-   plus a consistent shape:
-   - `parse_input/2`
-   - `part1/2`
-   - `part2/2`
-   - `solve/3` (or `solve/2` returning both answers)
-2. Test file in `test/dayNN_tests.pl`:
-   - puzzle example tests
-   - real-input answer locks for part 1 and part 2
-3. Bench hook in `bench/main.pl` with parse/part timings when practical.
-4. Function guide at
-   `Problem_Statements/days/dayNN_function_guide.md`.
-5. Python algorithm reference in `python/dayNN.py` for every day
-   (cross-validates the Prolog answers in a second language).
-6. Summary row in `Problem_Statements/days/summary_2020.md`.
+1. `python/dayNN.py` with the five names above.
+2. `python/tests/test_dayNN.py`.
+3. `Problem_Statements/days/dayNN_function_guide.md`.
+4. Row in `Problem_Statements/days/summary_2020.md`.
+5. Bench timings when interesting.
 
 ## Function guides are the durable artifact
 
-Guides should be written for a reader who is cold after 12+ months.
-Restate key Prolog forms and cross-link days aggressively.
+They always were, and they survive the language change. Write them for a
+reader who is cold after 12+ months.
+
+New guides are **Python-first**. Guides for days 00-13 were written during
+the Prolog era and are frozen with a banner saying so; rewrite one when
+that day is next touched rather than in a batch.
 
 Each guide should include:
+
 - Problem framing and representation choices.
-- Predicate-by-predicate walkthrough.
+- Function-by-function walkthrough.
 - Why the algorithm is correct.
 - Complexity discussion.
-- "If I were writing this in Rust" bridge section.
-- Optional optimization sidebar without forcing premature rewrites.
+- A "if I were writing this in Rust" bridge section. Rust is the anchor
+  language for comparisons and the corpus Matt returns to
+  (`C:\Users\m_lad\Repos\rust_study`).
+- Optional "possible optimization" sidebar, without forcing a rewrite.
+
+## About the user
+
+- 20+ year engineer, Software Program Manager; senior-level depth.
+- EE by training, embedded C daily, Python for scripting.
+- Bit/register/machine framings land well.
+- Rust is the anchor for comparisons.
+- **Matt reads code; the assistant writes it.** Pitch explanations at
+  lead/PM altitude -- what and why and tradeoffs over syntax drills.
+- Lead with a concrete numeric trace before stating an invariant
+  abstractly.
+
+`python/dayNN_mtl.py` files are Matt's own independent attempts. Do not let
+them anchor a solution, and do not treat them as day modules.
 
 ## Optimization policy
 
-- Shipping source should be idiomatic and readable Prolog first.
-- Faster alternatives can be documented in the function guide as
-  "Possible optimization" sidebars.
-- Prefer correctness + clarity in `src/`; keep deep optimization
-  experimental unless required.
-
-## Tutorial policy (11 days)
-
-Tutorial outputs live under `tutorial/dayN/README.md` and small,
-working `.pl` examples.
-
-Goals of tutorial phase:
-- Build fast reading fluency for core Prolog constructs.
-- Establish daily solve/test/guide rhythm.
-- Prepare directly for AoC day files starting July 1.
+Shipping source is readable Python first. Document faster alternatives in
+the function guide as sidebars rather than replacing clear code with clever
+opaque code.
 
 ## What not to do
 
-- Do not suggest abandoning the language rotation.
-- Do not force write-drill exercises unless explicitly requested.
-- Do not skip guides just to increase day throughput.
-- Do not replace readable source with clever but opaque tricks by default.
-
-## Likely first requests
-
-Expect requests to:
-1. Scaffold the repo layout.
-2. Settle Prolog toolchain details (runtime, test command, bench script).
-3. Create tutorial day 1 with code + guide.
-4. Set up a repeatable solve/test template for upcoming AoC days.
+- Do not suggest reviving the language rotation.
+- Do not suggest renaming the repo.
+- Do not add to, edit, or delete the frozen Prolog tree.
+- Do not skip guides to increase day throughput.
+- Do not assert an unverified answer as though it were confirmed.

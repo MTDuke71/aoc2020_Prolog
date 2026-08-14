@@ -1,4 +1,4 @@
-﻿def parse_input(raw: str) -> list[str]:
+def parse_input(raw: str) -> list[str]:
     return [line.strip() for line in raw.splitlines() if line.strip()]
 
 

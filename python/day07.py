@@ -1,18 +1,24 @@
-"""Day 7: Handy Haversacks — canonical reference for the Prolog solution.
+"""Day 7: Handy Haversacks.
 
-The rules are a directed, edge-weighted graph over bag colours. Mirrors
-src/day07.pl: parse once into rules[colour] = [(count, child), ...], then
+The rules are a directed, edge-weighted graph over bag colours.  Parse once
+into rules[colour] = [(count, child), ...], then walk it in both directions:
 
   - part1: reverse the edges and take the transitive closure of shiny
-    gold's parents (every colour that can eventually contain it),
+    gold's parents -- every colour that can eventually contain it,
   - part2: recursive weighted descendant count of one shiny gold bag.
 
-Re-confirms part1=370 / part2=29547.
+Part 1 must be done on the reversed graph.  Asking "can this colour reach
+shiny gold?" once per colour re-walks the same subgraphs over and over and
+goes exponential; inverting the edges and doing one traversal outward from
+shiny gold is O(V + E).
 """
 
 import re
+from pathlib import Path
 
 TARGET = "shiny gold"
+
+INPUT = Path(__file__).resolve().parent.parent / "inputs" / "day07.txt"
 
 
 def parse_input(raw: str) -> dict[str, list[tuple[int, str]]]:
@@ -62,9 +68,10 @@ def solve(raw: str) -> tuple[int, int]:
     return part1(rules), part2(rules)
 
 
-if __name__ == "__main__":
-    from pathlib import Path
-
-    raw = Path("inputs/day07.txt").read_text()
-    p1, p2 = solve(raw)
+def main() -> None:
+    p1, p2 = solve(INPUT.read_text())
     print(f"part1={p1} part2={p2}")
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

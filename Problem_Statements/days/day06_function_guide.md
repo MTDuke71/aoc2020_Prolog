@@ -1,5 +1,14 @@
 # Day 06 Function Guide — Custom Customs
 
+> **Written during this repo's Prolog era.** The solution it describes lives
+> in the frozen `src/` tree. The maintained solution for this day is
+> `python/day06.py`, tested by `python/tests/test_day06.py`. This guide is
+> kept for its problem framing and algorithm reasoning, which did not change
+> with the language; it will be rewritten Python-first when this day is next
+> touched. See the README for what "frozen" means here.
+
+---
+
 > [Day 04](day04_function_guide.md) split a batch file into blank-line
 > blocks and turned each block into a record. Day 6 has the *same* block
 > structure — groups separated by blank lines — so its `blocks/2`

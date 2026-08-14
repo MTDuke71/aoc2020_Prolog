@@ -1,4 +1,4 @@
-"""Day 10: Adapter Array -- canonical reference for the Prolog solution.
+"""Day 10: Adapter Array.
 
 Every adapter must be used and each accepts an input 1-3 jolts below its
 rating, so sorting the ratings fixes the single chain that uses them all.
@@ -6,6 +6,10 @@ Part 1 multiplies the number of 1-jolt steps by the number of 3-jolt steps.
 Part 2 counts the distinct sub-chains that still connect outlet to device --
 a linear DP where ways[v] = ways[v-1] + ways[v-2] + ways[v-3].
 """
+
+from pathlib import Path
+
+INPUT = Path(__file__).resolve().parent.parent / "inputs" / "day10.txt"
 
 
 def parse_input(raw: str) -> list[int]:
@@ -46,9 +50,10 @@ def solve(raw: str) -> tuple[int, int]:
     return diffs.count(1) * diffs.count(3), arrangements(chain)
 
 
-if __name__ == "__main__":
-    from pathlib import Path
-
-    raw = Path("inputs/day10.txt").read_text()
-    p1, p2 = solve(raw)
+def main() -> None:
+    p1, p2 = solve(INPUT.read_text())
     print(f"part1={p1} part2={p2}")
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

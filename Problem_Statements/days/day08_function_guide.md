@@ -1,5 +1,14 @@
 # Day 08 Function Guide — Handheld Halting
 
+> **Written during this repo's Prolog era.** The solution it describes lives
+> in the frozen `src/` tree. The maintained solution for this day is
+> `python/day08.py`, tested by `python/tests/test_day08.py`. This guide is
+> kept for its problem framing and algorithm reasoning, which did not change
+> with the language; it will be rewritten Python-first when this day is next
+> touched. See the README for what "frozen" means here.
+
+---
+
 > This is the day the puzzle input *is a program* and your job is to
 > **write the machine that runs it**. Three opcodes — `acc` (add to an
 > accumulator), `jmp` (relative branch), `nop` (fall through) — over a

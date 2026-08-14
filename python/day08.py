@@ -1,9 +1,9 @@
-"""Day 8: Handheld Halting — canonical reference for the Prolog solution.
+"""Day 8: Handheld Halting.
 
 The puzzle input is a program for a tiny accumulator machine (opcodes acc /
-jmp / nop); we write an interpreter. Mirrors src/day08.pl: parse into an
-indexed list of (op, arg), then run a fetch/decode/execute loop with a
-"seen" set of program counters.
+jmp / nop), so the solution is an interpreter.  Parse into an indexed list
+of (op, arg), then run a fetch/decode/execute loop carrying a "seen" set of
+program counters.
 
   - part1: run the boot code, which loops forever, and report the
     accumulator at the instant control is about to repeat an instruction,
@@ -12,6 +12,10 @@ indexed list of (op, arg), then run a fetch/decode/execute loop with a
 
 Re-confirms part1=1331 / part2=1121.
 """
+
+from pathlib import Path
+
+INPUT = Path(__file__).resolve().parent.parent / "inputs" / "day08.txt"
 
 
 def parse_input(raw: str) -> list[tuple[str, int]]:
@@ -66,9 +70,10 @@ def solve(raw: str) -> tuple[int, int]:
     return part1(program), part2(program)
 
 
-if __name__ == "__main__":
-    from pathlib import Path
-
-    raw = Path("inputs/day08.txt").read_text()
-    p1, p2 = solve(raw)
+def main() -> None:
+    p1, p2 = solve(INPUT.read_text())
     print(f"part1={p1} part2={p2}")
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

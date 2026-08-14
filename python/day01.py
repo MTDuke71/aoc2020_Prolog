@@ -1,12 +1,16 @@
 """Day 1: Report Repair.
 
-Python algorithm reference mirroring src/day01.pl. Input is one integer
-expense entry per line; find the 2 (part 1) / 3 (part 2) entries summing
-to 2020 and multiply them.
+Input is one integer expense entry per line; find the 2 (part 1) / 3
+(part 2) entries summing to 2020 and multiply them.  This is k-SUM, done
+as a depth-first take/skip walk rather than itertools.combinations, so the
+ascending-order bound can prune whole subtrees.
 """
 
 import math
+from pathlib import Path
 from typing import Iterator
+
+INPUT = Path(__file__).resolve().parent.parent / "inputs" / "day01.txt"
 
 
 def parse_input(raw: str) -> list[int]:
@@ -16,8 +20,9 @@ def parse_input(raw: str) -> list[int]:
 def k_sum(k: int, target: int, entries: list[int], start: int = 0) -> Iterator[list[int]]:
     """Yield every k-element combination of entries[start:] summing to target.
 
-    Mirrors the Prolog k_sum/4: entries must be ascending and non-negative
-    so the `x <= target` guard prunes doomed branches.
+    Entries must be sorted ascending and non-negative: that is what makes
+    the `x > target` break sound.  Once one candidate overshoots, every
+    later one does too, so the rest of the level can be abandoned.
     """
     if k == 0:
         if target == 0:
@@ -49,9 +54,10 @@ def solve(raw: str) -> tuple[int, int]:
     return part1(entries), part2(entries)
 
 
-if __name__ == "__main__":
-    from pathlib import Path
-
-    raw = Path("inputs/day01.txt").read_text()
-    p1, p2 = solve(raw)
+def main() -> None:
+    p1, p2 = solve(INPUT.read_text())
     print(f"part1={p1} part2={p2}")
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

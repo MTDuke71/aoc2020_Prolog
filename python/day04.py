@@ -1,15 +1,18 @@
 """Day 4: Passport Processing.
 
-Python algorithm reference mirroring src/day04.pl. Passports are
+Passports are
 blank-line-separated blocks of key:value fields. Part 1 counts
 passports with all seven required fields (cid optional); part 2
 additionally validates every field's value.
 """
 
 import re
+from pathlib import Path
 
 REQUIRED = ["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"]
 EYE_COLORS = {"amb", "blu", "brn", "gry", "grn", "hzl", "oth"}
+
+INPUT = Path(__file__).resolve().parent.parent / "inputs" / "day04.txt"
 
 
 def parse_input(raw: str) -> list[dict[str, str]]:
@@ -51,9 +54,7 @@ def valid_field(key: str, value: str) -> bool:
 
 
 def valid_passport(passport: dict[str, str]) -> bool:
-    return has_required_fields(passport) and all(
-        valid_field(key, value) for key, value in passport.items()
-    )
+    return has_required_fields(passport) and all(valid_field(key, value) for key, value in passport.items())
 
 
 def part1(passports: list[dict[str, str]]) -> int:
@@ -69,9 +70,10 @@ def solve(raw: str) -> tuple[int, int]:
     return part1(passports), part2(passports)
 
 
-if __name__ == "__main__":
-    from pathlib import Path
-
-    raw = Path("inputs/day04.txt").read_text()
-    p1, p2 = solve(raw)
+def main() -> None:
+    p1, p2 = solve(INPUT.read_text())
     print(f"part1={p1} part2={p2}")
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

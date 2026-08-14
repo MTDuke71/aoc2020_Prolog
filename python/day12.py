@@ -1,4 +1,4 @@
-"""Day 12: Rain Risk -- canonical reference for the Prolog solution.
+"""Day 12: Rain Risk.
 
 A list of single-letter actions with integer values, run as a tiny turtle
 machine.  The two parts read differently in the statement but are the same
@@ -17,9 +17,13 @@ clockwise right angle sends (x, y) to (y, -x), i.e. multiplication of the
 Gaussian integer x + yi by -i.  No trigonometry, no rounding.
 """
 
+from pathlib import Path
+
 CARDINALS = {"N": (0, 1), "S": (0, -1), "E": (1, 0), "W": (-1, 0)}
 
 START = {"ship": (0, 0, 1, 0), "waypoint": (0, 0, 10, 1)}
+
+INPUT = Path(__file__).resolve().parent.parent / "inputs" / "day12.txt"
 
 
 def parse_input(raw: str) -> list[tuple[str, int]]:
@@ -69,9 +73,10 @@ def solve(raw: str) -> tuple[int, int]:
     return part1(instructions), part2(instructions)
 
 
-if __name__ == "__main__":
-    from pathlib import Path
-
-    raw = Path("inputs/day12.txt").read_text()
-    p1, p2 = solve(raw)
+def main() -> None:
+    p1, p2 = solve(INPUT.read_text())
     print(f"part1={p1} part2={p2}")
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

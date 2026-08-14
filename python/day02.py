@@ -1,12 +1,12 @@
 """Day 2: Password Philosophy.
 
-Python algorithm reference mirroring src/day02.pl. Each line pairs a
-policy with a password: "Lo-Hi L: password". Part 1 counts passwords
+Each line pairs a policy with a password: "Lo-Hi L: password". Part 1 counts passwords
 where L occurs between Lo and Hi times (inclusive); part 2 counts
 passwords where exactly one of the 1-indexed positions Lo and Hi holds L.
 """
 
 import re
+from pathlib import Path
 from typing import NamedTuple
 
 
@@ -18,6 +18,8 @@ class Entry(NamedTuple):
 
 
 LINE = re.compile(r"(\d+)-(\d+) (\S): (\S+)")
+
+INPUT = Path(__file__).resolve().parent.parent / "inputs" / "day02.txt"
 
 
 def parse_input(raw: str) -> list[Entry]:
@@ -55,9 +57,10 @@ def solve(raw: str) -> tuple[int, int]:
     return part1(entries), part2(entries)
 
 
-if __name__ == "__main__":
-    from pathlib import Path
-
-    raw = Path("inputs/day02.txt").read_text()
-    p1, p2 = solve(raw)
+def main() -> None:
+    p1, p2 = solve(INPUT.read_text())
     print(f"part1={p1} part2={p2}")
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

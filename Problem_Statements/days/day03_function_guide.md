@@ -1,5 +1,14 @@
 # Day 03 Function Guide — Toboggan Trajectory
 
+> **Written during this repo's Prolog era.** The solution it describes lives
+> in the frozen `src/` tree. The maintained solution for this day is
+> `python/day03.py`, tested by `python/tests/test_day03.py`. This guide is
+> kept for its problem framing and algorithm reasoning, which did not change
+> with the language; it will be rewritten Python-first when this day is next
+> touched. See the README for what "frozen" means here.
+
+---
+
 > [Day 01](day01_function_guide.md) was search, [Day 02](day02_function_guide.md)
 > was parsing. Day 3 is the first **2-D grid** day, and grids are where a
 > language shows its data-representation cards: Prolog has no arrays, so the

@@ -1,0 +1,32 @@
+# Tooling config for the Python solutions.
+#
+# This repo predates its Python era.  The previous solution tree (src/, test/,
+# bench/) is frozen: still working, no longer maintained, and not to be
+# reformatted or collected.  Every setting below is fenced to python/.
+
+[tool.pytest.ini_options]
+testpaths = ["python/tests"]
+# Puts python/ on sys.path for the whole session.  This is the entire reason a
+# test module can say `import day03` with no package layout, no __init__.py,
+# and no sys.path juggling inside conftest.
+pythonpath = ["python"]
+addopts = "-ra"
+
+[tool.ruff]
+line-length = 110
+
+# Two fences, because one is not enough (both behaviours verified, not assumed):
+#
+#   include        bounds the directory walk.  `ruff format .` from the repo
+#                  root visits only python/.
+#   exclude +      bounds explicitly named paths.  `include` alone does NOT:
+#   force-exclude  `ruff format tutorial/x.py` reformats the file even when
+#                  include never mentions it.  Adding the directory to exclude
+#                  with force-exclude on turns that into "No Python files
+#                  found" instead.
+include = ["python/**/*.py"]
+exclude = ["src", "test", "bench", "tutorial", "scripts", "Problem_Statements"]
+force-exclude = true
+
+[tool.ruff.format]
+docstring-code-format = true

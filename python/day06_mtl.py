@@ -1,4 +1,5 @@
-﻿import re
+import re
+
 
 def parse_input1(raw: str) -> list[dict[str, str]]:
     groups = []
@@ -12,6 +13,7 @@ def parse_input1(raw: str) -> list[dict[str, str]]:
         groups.append(questions)
     return groups
 
+
 def parse_input2(raw: str) -> list[dict[str, str]]:
     groups = []
 
@@ -23,8 +25,8 @@ def parse_input2(raw: str) -> list[dict[str, str]]:
             if first:
                 common = set(line)
                 first = False
-            else:   
-                common  &= set(line)
+            else:
+                common &= set(line)
             if line != "\n" and line != " " and line != "":
                 if line not in questions:
                     questions.append(line)

@@ -1,5 +1,14 @@
 # Day 05 Function Guide — Binary Boarding
 
+> **Written during this repo's Prolog era.** The solution it describes lives
+> in the frozen `src/` tree. The maintained solution for this day is
+> `python/day05.py`, tested by `python/tests/test_day05.py`. This guide is
+> kept for its problem framing and algorithm reasoning, which did not change
+> with the language; it will be rewritten Python-first when this day is next
+> touched. See the README for what "frozen" means here.
+
+---
+
 > [Day 04](day04_function_guide.md) showed a predicate *being* a lookup
 > table (`valid_field/1`, one clause per case). Day 5 reuses that exact
 > move for a four-line alphabet — `bit/2` — but the real lesson is a

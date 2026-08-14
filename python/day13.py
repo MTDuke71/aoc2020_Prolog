@@ -1,4 +1,4 @@
-"""Day 13: Shuttle Search -- canonical reference for the Prolog solution.
+"""Day 13: Shuttle Search.
 
 Bus N departs at every timestamp divisible by N.  Both parts are modular
 arithmetic on the same notes:
@@ -16,19 +16,21 @@ it also satisfies the next bus, then multiply step by that bus ID.  Fewer
 than `id` strides per bus, so a handful of thousands of steps for an answer
 near 10^15.
 
-Python's % is floored like Prolog's (unlike C/Rust), so (-earliest) % id
-lands in 0..id-1 with no correction.
+Python's % is floored, not truncating: the result takes the sign of the
+divisor, so (-earliest) % id lands in 0..id-1 with no correction.  A C or
+Rust `%` would hand back a negative here and both parts would be wrong.
+Pinned by test_floored_modulo_is_what_makes_this_work.
 """
+
+from pathlib import Path
+
+INPUT = Path(__file__).resolve().parent.parent / "inputs" / "day13.txt"
 
 
 def parse_input(raw: str) -> tuple[int, list[tuple[int, int]]]:
     lines = [line.strip() for line in raw.splitlines() if line.strip()]
     earliest = int(lines[0])
-    buses = [
-        (offset, int(field))
-        for offset, field in enumerate(lines[1].split(","))
-        if field != "x"
-    ]
+    buses = [(offset, int(field)) for offset, field in enumerate(lines[1].split(",")) if field != "x"]
     return earliest, buses
 
 
@@ -53,9 +55,10 @@ def solve(raw: str) -> tuple[int, int]:
     return part1(notes), part2(notes)
 
 
-if __name__ == "__main__":
-    from pathlib import Path
-
-    raw = Path("inputs/day13.txt").read_text()
-    p1, p2 = solve(raw)
+def main() -> None:
+    p1, p2 = solve(INPUT.read_text())
     print(f"part1={p1} part2={p2}")
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

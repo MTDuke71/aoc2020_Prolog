@@ -1,5 +1,14 @@
 # Day 12 Function Guide — Rain Risk
 
+> **Written during this repo's Prolog era.** The solution it describes lives
+> in the frozen `src/` tree. The maintained solution for this day is
+> `python/day12.py`, tested by `python/tests/test_day12.py`. This guide is
+> kept for its problem framing and algorithm reasoning, which did not change
+> with the language; it will be rewritten Python-first when this day is next
+> touched. See the README for what "frozen" means here.
+
+---
+
 > A tiny **turtle machine**: 769 instructions, each a letter and a number,
 > driving a ship around a plane. Report its **Manhattan distance** from
 > the origin. Part 2 arrives and announces that you misread every action —

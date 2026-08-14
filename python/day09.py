@@ -1,4 +1,4 @@
-"""Day 9: Encoding Error -- canonical reference for the Prolog solution.
+"""Day 9: Encoding Error.
 
 After a 25-number preamble, each number must be the sum of two different
 values from the preceding 25 numbers. Part 1 finds the first invalid number;
@@ -8,6 +8,10 @@ The optional preamble argument is useful for the statement's five-number
 example and defaults to the real puzzle size of 25.
 """
 
+from pathlib import Path
+
+INPUT = Path(__file__).resolve().parent.parent / "inputs" / "day09.txt"
+
 
 def parse_input(raw: str) -> list[int]:
     return [int(line) for line in raw.splitlines() if line.strip()]
@@ -15,13 +19,12 @@ def parse_input(raw: str) -> list[int]:
 
 def has_valid_sum(target: int, window: list[int]) -> bool:
     # Different values are required, so a lone 25 cannot make 50 valid.
-    return any(a != b and a + b == target for i, a in enumerate(window)
-               for b in window[i + 1:])
+    return any(a != b and a + b == target for i, a in enumerate(window) for b in window[i + 1 :])
 
 
 def find_invalid(numbers: list[int], preamble: int = 25) -> tuple[int, int]:
     for i in range(preamble, len(numbers)):
-        window = numbers[i - preamble:i]
+        window = numbers[i - preamble : i]
         if not has_valid_sum(numbers[i], window):
             return i, numbers[i]
     raise ValueError("no invalid number")
@@ -39,7 +42,7 @@ def contiguous_range(numbers: list[int], target: int) -> list[int]:
         for end in range(start + 1, len(numbers)):
             total += numbers[end]
             if total == target:
-                return numbers[start:end + 1]
+                return numbers[start : end + 1]
             if total > target:
                 break
     raise ValueError("no contiguous range")
@@ -56,9 +59,10 @@ def solve(raw: str) -> tuple[int, int]:
     return part1(numbers), part2(numbers)
 
 
-if __name__ == "__main__":
-    from pathlib import Path
-
-    raw = Path("inputs/day09.txt").read_text()
-    p1, p2 = solve(raw)
+def main() -> None:
+    p1, p2 = solve(INPUT.read_text())
     print(f"part1={p1} part2={p2}")
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

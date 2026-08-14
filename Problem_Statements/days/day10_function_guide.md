@@ -1,5 +1,14 @@
 # Day 10 Function Guide — Adapter Array
 
+> **Written during this repo's Prolog era.** The solution it describes lives
+> in the frozen `src/` tree. The maintained solution for this day is
+> `python/day10.py`, tested by `python/tests/test_day10.py`. This guide is
+> kept for its problem framing and algorithm reasoning, which did not change
+> with the language; it will be rewritten Python-first when this day is next
+> touched. See the README for what "frozen" means here.
+
+---
+
 > One sorted list, two very different questions. **Part 1 is a
 > difference histogram**: sort the ratings, cap the ends with the outlet
 > and the device, take adjacent differences, and multiply how many are

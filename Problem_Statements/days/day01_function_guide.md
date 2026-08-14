@@ -1,5 +1,14 @@
 # Day 01 Function Guide — Report Repair
 
+> **Written during this repo's Prolog era.** The solution it describes lives
+> in the frozen `src/` tree. The maintained solution for this day is
+> `python/day01.py`, tested by `python/tests/test_day01.py`. This guide is
+> kept for its problem framing and algorithm reasoning, which did not change
+> with the language; it will be rewritten Python-first when this day is next
+> touched. See the README for what "frozen" means here.
+
+---
+
 > First real day of AoC 2020, and the first day where **backtracking does the
 > work**. [Day 00](day00_function_guide.md) was deliberately deterministic —
 > every predicate had exactly one solution. Day 1 is the opposite: the whole

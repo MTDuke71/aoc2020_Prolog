@@ -1,5 +1,14 @@
 # Day 13 Function Guide — Shuttle Search
 
+> **Written during this repo's Prolog era.** The solution it describes lives
+> in the frozen `src/` tree. The maintained solution for this day is
+> `python/day13.py`, tested by `python/tests/test_day13.py`. This guide is
+> kept for its problem framing and algorithm reasoning, which did not change
+> with the language; it will be rewritten Python-first when this day is next
+> touched. See the README for what "frozen" means here.
+
+---
+
 > Two lines of input and the shortest source file since [Day
 > 5](day05_function_guide.md) — and the first day whose part 2 is
 > **unreachable by search**. Bus *N* departs at every timestamp divisible
@@ -31,9 +40,9 @@ rather than just the bus list.
 
 Real input: earliest `1000053`, nine buses in service —
 
-| Offset | 0 | 13 | 19 | 37 | 42 | 48 | 50 | 60 | 67 |
-|---|---|---|---|---|---|---|---|---|---|
-| **Bus ID** | 19 | 37 | 523 | 13 | 23 | 29 | 547 | 41 | 17 |
+| Offset                | 0  | 13 | 19  | 37 | 42 | 48 | 50  | 60 | 67          |
+| --------------------- | -- | -- | --- | -- | -- | -- | --- | -- | ----------- |
+| **Bus ID**      | 19 | 37 | 523 | 13 | 23 | 29 | 547 | 41 | 17          |
 | **Part 1 wait** | 12 | 20 | 446 | 11 | 10 | 12 | 410 | 19 | **6** |
 
 Part 1's winner is the last bus in the list: **17 × 6 = 102**. Part 2 is
@@ -55,10 +64,10 @@ No schedule needs to be built and no departure times enumerated. Both
 parts are questions about divisibility, and they differ only in how many
 divisibility facts must hold at once:
 
-| | Constraint | Count |
-|---|---|---|
-| Part 1 | `(Earliest + Wait) mod Id =:= 0`, minimise `Wait` | one bus at a time |
-| Part 2 | `(T + Offset) mod Id =:= 0` | **all nine at once** |
+|        | Constraint                                            | Count                      |
+| ------ | ----------------------------------------------------- | -------------------------- |
+| Part 1 | `(Earliest + Wait) mod Id =:= 0`, minimise `Wait` | one bus at a time          |
+| Part 2 | `(T + Offset) mod Id =:= 0`                         | **all nine at once** |
 
 Part 1 minimises over independent one-bus problems; part 2 must satisfy
 nine coupled ones simultaneously. That is the entire difficulty jump, and
@@ -200,9 +209,9 @@ steps — against 3.27 × 10¹⁴ for the naive loop.
 
 Measured on the real input, the fold is cheaper still:
 
-| Bus | 19 | 37 | 523 | 13 | 23 | 29 | 547 | 41 | 17 | **total** |
-|---|---|---|---|---|---|---|---|---|---|---|
-| Strides | 0 | 11 | 452 | 10 | 17 | 19 | 375 | 23 | 4 | **911** |
+| Bus     | 19 | 37 | 523 | 13 | 23 | 29 | 547 | 41 | 17 | **total** |
+| ------- | -- | -- | --- | -- | -- | -- | --- | -- | -- | --------------- |
+| Strides | 0  | 11 | 452 | 10 | 17 | 19 | 375 | 23 | 4  | **911**   |
 
 **911 steps.** The two big primes (523, 547) account for 91% of them,
 which is the `< Id` bound showing through: the cost of a congruence is
@@ -402,8 +411,7 @@ crt_step(Offset-Id, T0-Step0, T-Step) :-
 
 One congruence folded in: find the first surviving timestamp, then widen
 the stride. The two lines are the two halves of the invariant —
-`align/5` maintains "T is the smallest solution so far", `Step is
-Step0 * Id` maintains "Step is the spacing between solutions".
+`align/5` maintains "T is the smallest solution so far", `Step is Step0 * Id` maintains "Step is the spacing between solutions".
 
 ### `align/5`
 
@@ -576,13 +584,13 @@ Prolog's. It independently prints `part1=102 part2=327300950120029`.
 Let *k* be the number of buses in service (9) and *f* the number of
 schedule fields (68).
 
-| Phase | Cost |
-|---|---|
-| Parse | O(f) — one `nth0/3` enumeration, one `number_string/2` per field |
-| `wait_for/3` | O(1) |
-| `earliest_bus/3` | O(k) |
-| `align/5` for bus `Id` | O(`Id`) iterations, worst case |
-| `crt/2` | **O(Σ Idᵢ)** — at most 1249 iterations; 911 in practice |
+| Phase                      | Cost                                                                 |
+| -------------------------- | -------------------------------------------------------------------- |
+| Parse                      | O(f) — one`nth0/3` enumeration, one `number_string/2` per field |
+| `wait_for/3`             | O(1)                                                                 |
+| `earliest_bus/3`         | O(k)                                                                 |
+| `align/5` for bus `Id` | O(`Id`) iterations, worst case                                     |
+| `crt/2`                  | **O(Σ Idᵢ)** — at most 1249 iterations; 911 in practice     |
 
 The part-2 bound is worth restating because it is so unlike the naive
 one: the cost depends on the **sum** of the moduli while the answer
@@ -725,8 +733,7 @@ another twenty lines that must themselves be tested, to save 0.15 ms on a
 problem where nothing is waiting. Worth writing when the moduli are large
 (cryptographic CRT, where they are hundreds of bits and the scan is
 genuinely impossible) — and worth knowing that SWI can shortcut it for
-*prime* moduli via Fermat's little theorem: `Inverse is powm(Step0,
-Id-2, Id)`, since `a^(p-2) ≡ a⁻¹ (mod p)`. That is a one-liner on a
+*prime* moduli via Fermat's little theorem: `Inverse is powm(Step0, Id-2, Id)`, since `a^(p-2) ≡ a⁻¹ (mod p)`. That is a one-liner on a
 built-in, and the only reason it is not here is that it silently assumes
 primality where the scan only needs coprimality.
 

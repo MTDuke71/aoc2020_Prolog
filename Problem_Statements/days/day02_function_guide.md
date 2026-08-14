@@ -1,5 +1,14 @@
 # Day 02 Function Guide — Password Philosophy
 
+> **Written during this repo's Prolog era.** The solution it describes lives
+> in the frozen `src/` tree. The maintained solution for this day is
+> `python/day02.py`, tested by `python/tests/test_day02.py`. This guide is
+> kept for its problem framing and algorithm reasoning, which did not change
+> with the language; it will be rewritten Python-first when this day is next
+> touched. See the README for what "frozen" means here.
+
+---
+
 > [Day 01](day01_function_guide.md) was about **search** — backtracking did
 > all the work. Day 2 is about **parsing**: it's the first day where an input
 > line has internal structure (`1-3 a: abcde`) instead of being a bare number.

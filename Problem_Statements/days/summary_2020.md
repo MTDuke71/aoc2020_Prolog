@@ -1,4 +1,13 @@
-﻿# AoC 2020 Summary
+# AoC 2020 Summary
+
+> Rows 00-13 were solved during this repo's Prolog era and their notes
+> describe that implementation; the maintained solutions are now the
+> Python ones in `python/`, which produce the same answers. Day 14 onward
+> is Python-first. See the [README](../../README.md).
+> 
+> **Part 1 / Part 2 columns hold submitted, accepted answers.** A day whose
+> answers have not been submitted shows `?` and carries `LOCKED = None` in
+> its test module.
 
 | Day | Status | Part 1 | Part 2 | Notes |
 |---:|---|---:|---:|---|

@@ -1,5 +1,14 @@
 # Day 00 Function Guide — The Tyranny of the Rocket Equation
 
+> **Written during this repo's Prolog era.** The solution it describes lives
+> in the frozen `src/` tree. The maintained solution for this day is
+> `python/day00.py`, tested by `python/tests/test_day00.py`. This guide is
+> kept for its problem framing and algorithm reasoning, which did not change
+> with the language; it will be rewritten Python-first when this day is next
+> touched. See the README for what "frozen" means here.
+
+---
+
 > Tutorial **dry run** (it's AoC 2019 Day 1, reused). Besides solving the
 > puzzle, this day's job is to exercise the whole per-day pipeline —
 > `src/day00.pl`, `test/day00_tests.pl`, `bench/main.pl`, this guide, and a

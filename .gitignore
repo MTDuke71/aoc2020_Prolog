@@ -13,3 +13,9 @@ Thumbs.db
 /inputs/
 
 *.pyc
+
+# Python tooling
+.venv/
+.pytest_cache/
+__pycache__/
+.ruff_cache/

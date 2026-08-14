@@ -1,5 +1,14 @@
 # Day 04 Function Guide — Passport Processing
 
+> **Written during this repo's Prolog era.** The solution it describes lives
+> in the frozen `src/` tree. The maintained solution for this day is
+> `python/day04.py`, tested by `python/tests/test_day04.py`. This guide is
+> kept for its problem framing and algorithm reasoning, which did not change
+> with the language; it will be rewritten Python-first when this day is next
+> touched. See the README for what "frozen" means here.
+
+---
+
 > [Day 02](day02_function_guide.md) parsed one record per line;
 > Day 4 breaks the line-per-record assumption two ways: records span
 > *multiple* lines (blank lines separate them), and fields arrive in *any

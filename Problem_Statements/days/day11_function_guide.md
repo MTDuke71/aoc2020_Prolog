@@ -1,5 +1,14 @@
 # Day 11 Function Guide — Seating System
 
+> **Written during this repo's Prolog era.** The solution it describes lives
+> in the frozen `src/` tree. The maintained solution for this day is
+> `python/day11.py`, tested by `python/tests/test_day11.py`. This guide is
+> kept for its problem framing and algorithm reasoning, which did not change
+> with the language; it will be rewritten Python-first when this day is next
+> touched. See the README for what "frozen" means here.
+
+---
+
 > The first **cellular automaton** of the year, and the first day where
 > the naive representation is fast enough to look fine on the example and
 > hopeless on the real input. Both parts run the *same* simulation — empty

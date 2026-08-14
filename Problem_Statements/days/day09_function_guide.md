@@ -1,5 +1,14 @@
 # Day 09 Function Guide — Encoding Error
 
+> **Written during this repo's Prolog era.** The solution it describes lives
+> in the frozen `src/` tree. The maintained solution for this day is
+> `python/day09.py`, tested by `python/tests/test_day09.py`. This guide is
+> kept for its problem framing and algorithm reasoning, which did not change
+> with the language; it will be rewritten Python-first when this day is next
+> touched. See the README for what "frozen" means here.
+
+---
+
 > Two small classics wearing a cipher's costume. **Part 1 is a sliding
 > window**: slide a fixed-size frame down a list and, at each new value,
 > ask a **2-SUM** question of the frame behind it — "are there two

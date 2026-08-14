@@ -1,5 +1,14 @@
 # Day 07 Function Guide — Handy Haversacks
 
+> **Written during this repo's Prolog era.** The solution it describes lives
+> in the frozen `src/` tree. The maintained solution for this day is
+> `python/day07.py`, tested by `python/tests/test_day07.py`. This guide is
+> kept for its problem framing and algorithm reasoning, which did not change
+> with the language; it will be rewritten Python-first when this day is next
+> touched. See the README for what "frozen" means here.
+
+---
+
 > This is the day the puzzle input *is* a knowledge base. Every line is a
 > **rule** — "a light red bag contains 1 bright white and 2 muted yellow
 > bags" — and the whole file is a directed, edge-weighted graph over bag
