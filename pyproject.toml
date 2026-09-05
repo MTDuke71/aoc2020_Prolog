@@ -11,6 +11,9 @@ testpaths = ["python/tests"]
 # and no sys.path juggling inside conftest.
 pythonpath = ["python"]
 addopts = "-ra"
+# `slow` is registered so `-m "not slow"` can skip the multi-second tests.  Nothing is
+# deselected by default: the full suite is still the thing that says a day is green.
+markers = ["slow: takes seconds, not milliseconds (day17_alt's 4-D brute-force scan)"]
 
 [tool.ruff]
 line-length = 110

@@ -43,6 +43,8 @@ many cubes are active after six cycles? The example ends at 112.
 neighbours. Same slice, same rule, same six cycles. The example ends
 at 848.
 
+
+
 The real input is an 8×8 slice with 31 active cells. Anyone who has seen
 Life will recognise the example: it is the **glider**, and the engine
 here with `dims=2` is plain Life, in which the glider moves one cell
@@ -145,12 +147,12 @@ Traced on the example, 3-D, first cycle. The five glider cells scatter
 26 increments each; here is the z=0 plane of the counter with the rule
 applied cell by cell (x across 0..2, y down 0..3):
 
-| y | counts | verdicts | next |
-|---:|---|---|---|
-| 0 | 1 1 2 | (1,0) is active with 1 → dies | `...` |
-| 1 | 3 5 3 | (0,1) inactive with 3 → born; (1,1) has 5 → stays off; (2,1) active with 3 → stays | `#.#` |
-| 2 | 1 3 2 | (0,2) active with 1 → dies; (1,2) active with 3 → stays; (2,2) active with 2 → stays | `.##` |
-| 3 | 2 3 2 | (1,3) inactive with 3 → born | `.#.` |
+| y | counts | verdicts                                                                                | next    |
+| -: | ------ | --------------------------------------------------------------------------------------- | ------- |
+| 0 | 1 1 2  | (1,0) is active with 1 → dies                                                          | `...` |
+| 1 | 3 5 3  | (0,1) inactive with 3 → born; (1,1) has 5 → stays off; (2,1) active with 3 → stays   | `#.#` |
+| 2 | 1 3 2  | (0,2) active with 1 → dies; (1,2) active with 3 → stays; (2,2) active with 2 → stays | `.##` |
+| 3 | 2 3 2  | (1,3) inactive with 3 → born                                                           | `.#.` |
 
 Read the last column top to bottom, dropping the empty row: `#.#`, `.##`,
 `.#.` — the statement's `z=0` layer after one cycle, whose frame has
@@ -172,9 +174,9 @@ statement's layer dumps, and so `dims=2` is reachable.
 `len(boot(slice2d, 3))` and `len(boot(slice2d, 4))`. On the real input,
 cycle by cycle:
 
-| cycle | 0 | 1 | 2 | 3 | 4 | 5 | 6 |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| 3-D active | 31 | 71 | 81 | 197 | 172 | 318 | 359 |
+| cycle      |  0 |   1 |   2 |     3 |   4 |     5 |     6 |
+| ---------- | -: | --: | --: | ----: | --: | ----: | ----: |
+| 3-D active | 31 |  71 |  81 |   197 | 172 |   318 |   359 |
 | 4-D active | 31 | 185 | 245 | 1,176 | 592 | 2,556 | 2,228 |
 
 Both sequences saw-tooth — an odd cycle spreads the pattern into fresh
@@ -233,21 +235,20 @@ increments, then one pass over the counter, whose size is at most
 heavily). Over six cycles the work is Σ *a<sub>c</sub>* · *k*. Measured on
 the real input:
 
-| | cells scattered (Σ *a<sub>c</sub>*, c = 0..5) | × *k* | tuple builds |
-|---|---:|---:|---:|
-| 3-D | 870 | 26 | 22,620 |
-| 4-D | 4,785 | 80 | 382,800 |
+|     | cells scattered (Σ*a<sub>c</sub>*, c = 0..5) | ×*k* | tuple builds |
+| --- | ----------------------------------------------: | ------: | -----------: |
+| 3-D |                                             870 |      26 |       22,620 |
+| 4-D |                                           4,785 |      80 |      382,800 |
 
-Each tuple build in the shipping code is a generator over `zip(cell,
-offset)` — the clearest way to write "add these two vectors" in Python
+Each tuple build in the shipping code is a generator over `zip(cell, offset)` — the clearest way to write "add these two vectors" in Python
 and also the slowest, at roughly half a microsecond each. That is where
 the time goes:
 
-| phase | best | median |
-|---|---:|---:|
-| parse | 0.004 ms | 0.004 ms |
-| part 1 | 12.5 ms | 12.6 ms |
-| part 2 | 229 ms | 232 ms |
+| phase  |     best |   median |
+| ------ | -------: | -------: |
+| parse  | 0.004 ms | 0.004 ms |
+| part 1 |  12.5 ms |  12.6 ms |
+| part 2 |   229 ms |   232 ms |
 
 (`python\bench.py 17 -n 20`, best/median of 20.) Part 2 is 18× part 1
 for 17× the tuple builds — the cost is linear in the scatter count, as
@@ -317,12 +318,12 @@ so it would be the next thing to try.
 All measured on the real input, best of 5, six cycles, against the
 shipping `step` (`variants.py` in the session scratchpad, not the repo):
 
-| variant | 3-D | 4-D | 4-D speed-up |
-|---|---:|---:|---:|
-| shipping (`tuple(a + b for a, b in zip(...))`) | 12.6 ms | 232 ms | — |
-| `tuple(map(add, cell, offset))` | 7.6 ms | 139 ms | 1.7× |
-| unpacked, fixed width | 3.2 ms | 59 ms | 3.9× |
-| mirror-folded (on the `map(add)` base) | 7.4 ms | 74 ms | 3.1× |
+| variant                                          |     3-D |    4-D | 4-D speed-up |
+| ------------------------------------------------ | ------: | -----: | -----------: |
+| shipping (`tuple(a + b for a, b in zip(...))`) | 12.6 ms | 232 ms |           — |
+| `tuple(map(add, cell, offset))`                |  7.6 ms | 139 ms |        1.7× |
+| unpacked, fixed width                            |  3.2 ms |  59 ms |        3.9× |
+| mirror-folded (on the`map(add)` base)          |  7.4 ms |  74 ms |        3.1× |
 
 **`map(add)`.** Same semantics, one C-level call instead of a Python
 generator per tuple. A defensible swap for the shipping code; it stays in
@@ -343,8 +344,7 @@ images be implied. Scattering then needs a weight: a stored cell at z=1
 has an image at z=−1 that also touches the z=0 targets, so those targets
 get 2 from it; a target with z < 0 is dropped. In general the weight is
 the product over the folded axes of `2 if cell_axis == 1 and target_axis == 0 else 1`,
-and the final count is Σ 2<sup>(number of strictly positive folded
-coordinates)</sup> over stored cells. On the real input it stores 196 of
+and the final count is Σ 2<sup>(number of strictly positive foldedcoordinates)</sup> over stored cells. On the real input it stores 196 of
 the 359 3-D cells and 682 of the 2,228 4-D ones — 3.3× fewer — but the
 weight computation eats most of that in Python, so it lands at 1.9× over
 its base. Folding z ↔ w as well (store z ≥ w ≥ 0) would take the 4-D
@@ -362,9 +362,156 @@ table.
 
 ---
 
+## 8. Alternative implementation: the flat scan
+
+Source: [`python/day17_alt.py`](../../python/day17_alt.py) ·
+Tests: [`python/tests/test_day17_alt.py`](../../python/tests/test_day17_alt.py)
+
+The shipping module is the *scatter*: start from the active cells, push
+counts outward, let the dimension be a number. `day17_alt.py` is the same
+puzzle written from the other end, the classic AoC brute force, and it is
+the version to read first if the scatter feels too clever. It follows a
+screenshot solution line for line — the names `ON`, `NEW_ON` and `nbr`,
+the fixed `range` literals, the two nested `if`s — and adds only the two
+rule lines that had scrolled off the bottom of the screen.
+
+|                | `day17.py` (scatter)                          | `day17_alt.py` (scan)                                     |
+| -------------- | --------------------------------------------- | --------------------------------------------------------- |
+| starts from    | the active cells                              | every cell of a fixed box                                 |
+| dimension      | a parameter, `dims`                           | one `for` per axis; 3-D and 4-D are two functions         |
+| grid bound     | never computed                                | literals: x, y in −15..14, z in −7..7, w in −8..7         |
+| work per cycle | active × (3<sup>d</sup> − 1) tuple builds     | box cells × 3<sup>d</sup> set lookups                     |
+| coordinates    | `(x, y)` = (col, row)                         | `(row, col)`, as the screenshot                           |
+| part 2 (real)  | 0.23 s                                        | 10.1 s                                                    |
+
+### Reading `cycle_4d`
+
+Four `for`s pick a cell `(x, y, z, w)`. Four more walk `dx, dy, dz, dw`
+over {−1, 0, 1} — 81 combinations — and the line
+`if dx != 0 or dy != 0 or dz != 0 or dw != 0` throws out the one where all
+four are zero, which is the cell itself. That leaves the 80 neighbours the
+statement promises. Each one that is in `ON` bumps `nbr`. Then the rules,
+exactly as the statement words them:
+
+```python
+if (x, y, z, w) in ON and nbr in [2, 3]:      # active: survives on 2 or 3
+    NEW_ON.add((x, y, z, w))
+if (x, y, z, w) not in ON and nbr == 3:       # inactive: born on exactly 3
+    NEW_ON.add((x, y, z, w))
+```
+
+Anything not added is inactive next cycle, including every cell the loop
+never reached — which is what makes the box size matter (below).
+
+A trace on the example, in the module's `(row, col)` frame, where the
+glider parses to `{(0,1), (1,2), (2,0), (2,1), (2,2)}` at z = w = 0:
+
+| cell scanned   | active neighbours found                       | `nbr` | in `ON`? | result   |
+| -------------- | --------------------------------------------- | ----: | -------- | -------- |
+| `(1, 1, 0, 0)` | all five                                      |     5 | no       | stays off |
+| `(1, 0, 0, 0)` | `(0,1)`, `(2,0)`, `(2,1)`                     |     3 | no       | born     |
+| `(2, 1, 0, 0)` | `(1,2)`, `(2,0)`, `(2,2)`                     |     3 | yes      | survives |
+| `(2, 2, 1, 0)` | `(1,2)`, `(2,1)`, and `(2,2)` one layer below |     3 | no       | born     |
+
+The last row is the whole reason a 2-D slice grows into 3-D and 4-D: a
+cell one step off the slice sees the slice's cells at `dz = −1`, so the
+layer above is populated from the very first cycle. In the shipping
+module's `(x, y)` frame these are the `(0,1)` birth and the `(2,2)` birth
+at z=1 in its docstring trace, transposed.
+
+### Why the box is enough — and why that is the one thing to test
+
+The scan only ever evaluates cells inside the box. A cell outside is never
+asked, so if the pattern could reach the edge the answer would be silently
+wrong. It cannot: a cell is born only next to an active one, so the
+occupied region grows by at most one cell per side per cycle (section 2).
+From the real 8×8 slice at rows and columns 0..7 that is −6..13 on the
+slice axes and −6..6 on z and w after six cycles; the screenshot's
+literals hold that with room to spare. `test_day17_alt.py` pins it
+directly: on the example and on the real input, after every one of the
+six cycles, no active cell sits on the box's edge. That test is the
+contract this implementation rests on, in the same way
+`test_real_input_is_mirror_symmetric_in_the_extra_axes` is the contract
+for the folded sidebar in section 7.
+
+### Cost, and the three-line fix
+
+The price of "every cell of the box" is that it is paid whether or not
+anything is near: 30·30·15 = 13,500 cells per 3-D cycle and 30·30·15·16 =
+216,000 per 4-D cycle, each doing 80 set lookups. Six 4-D cycles is about
+105 million iterations of plain Python, and the cost is the same for the
+3×3 example as for the real input — the box does not know how big the
+pattern is. Measured on the real input (`tight_box.py` in the session
+scratchpad, best of 2; `day17.py` figures from section 5):
+
+| 4-D, six cycles                              | cells scanned per cycle | time    |
+| -------------------------------------------- | ----------------------: | ------: |
+| `day17_alt.py`, screenshot box 30×30×15×16   |                 216,000 |  10.1 s |
+| known bound, 20×20×13×13                     |                  67,600 |   3.0 s |
+| growing box: min−1..max+1 of the current set |    grows with the state |  0.86 s |
+| `day17.py` scatter                           |  active cells × 80 only |  0.23 s |
+
+Part 1 is 0.18 s against 12.5 ms, a 14× gap; part 2's is 44×. The gap
+widens because the two designs scale with different things: the scatter's
+work grew with the active count (Σ*a<sub>c</sub>* 870 → 4,785, 5.5×) times
+the neighbour count (26 → 80, 3×), about 17× in all, while the scan's
+grew with the box (13,500 → 216,000 cells, 16×) times the same 3×, about
+48×.
+
+Two things worth noticing. First, shrinking the box to the bound section
+2 already computed is worth 3.4× with no change in shape. Second, letting
+the box hug the current state (recompute min and max each cycle, add one
+cell of margin) is worth 12×, and still reads as the same four loops — the
+`range` literals become `range(lo - 1, hi + 2)`. That version is within 4×
+of the scatter, which says most of the scatter's advantage is *not*
+visiting empty space, and the rest is not building 80 tuples per cell.
+Neither tweak is in the module: the point of the file is to be the
+screenshot, and the screenshot's fixed literals are part of why it reads
+so easily.
+
+### Tests
+
+`python/tests/test_day17_alt.py`, 18 tests, about 23 s in total:
+
+- **Parse** — the example in `(row, col)`; that it is the transpose of the
+  shipping parse; the CRLF round trip.
+- **The rule, count by count** — the same nine-case table as the shipping
+  tests, run through `cycle_3d`; a lone cube dies.
+- **Agreement, cycle for cycle** — starting from the same set, `cycle_3d`
+  equals `day17.step(…, 3)` after each of six cycles on the example, and
+  `cycle_4d` equals `day17.step(…, 4)` likewise, ending at 848. Part 1 on
+  the example is 112.
+- **The box** — after every cycle, no active cell on the box's edge:
+  example in 3-D and 4-D, real input in both.
+- **The accepted answers** — 359 and 2228 from the real input, taken from
+  the same 4-D boot as the box check so the 10-second scan runs once.
+
+The two tests that run a six-cycle 4-D boot are marked `slow` (the
+marker is registered in `pyproject.toml`). `pytest -m "not slow"` skips
+them and the rest of the module runs in under a second; nothing is
+deselected by default, so the plain `pytest` that says a day is green
+still runs everything.
+
+### If I were writing *this one* in Rust
+
+This is the version that maps onto a dense array rather than a
+`HashSet`: `[[[[bool; 16]; 15]; 30]; 30]`, two of them for old and new,
+and the same eight nested loops. There is no hashing and no tuple
+allocation; the inner loop is 80 byte loads at compile-time-known
+strides, which is exactly what the optimiser and the cache like. The
+fixed literals that are a *cost* in Python (no way to skip empty space
+without rewriting the loops) become a *feature* in Rust (array sizes
+known at compile time, bounds checks provable, everything on the stack).
+Not measured here — the Rust port in section 6 is the scatter — but this
+is the shape the dense route in section 7 would take, and in C or Rust it
+is the natural first draft rather than the slow one.
+
+---
+
 ## Tests
 
-`python/tests/test_day17.py`, 31 tests plus the locked check:
+`python/tests/test_day17.py`, 31 tests plus the locked check: (the alternative's own
+18 tests are described in section 8):
 
 - **Parse** — the example's five cells; the CRLF round trip.
 - **Neighbourhood** — 8 / 26 / 80 offsets for 2 / 3 / 4 dimensions, all
