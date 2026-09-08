@@ -20,11 +20,6 @@
 Source: [`python/day20.py`](../../python/day20.py) ·
 Tests: [`python/tests/test_day20.py`](../../python/tests/test_day20.py)
 
-> The statement file [`day20.md`](day20.md) currently holds only Part
-> One. Part Two's text (the sea monster, the border-stripped example
-> image, the answer 273) is summarised in section 1 from the puzzle;
-> paste the real text in when convenient.
-
 ---
 
 ## 1. The problem
