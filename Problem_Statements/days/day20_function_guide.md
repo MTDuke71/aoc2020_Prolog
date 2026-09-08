@@ -18,7 +18,10 @@
 > four tiles as the assembly does.
 
 Source: [`python/day20.py`](../../python/day20.py) ·
-Tests: [`python/tests/test_day20.py`](../../python/tests/test_day20.py)
+Tests: [`python/tests/test_day20.py`](../../python/tests/test_day20.py) ·
+Chart: [`python/day20_chart.py`](../../python/day20_chart.py) renders the
+assembled image with its monsters marked to `inputs/day20_sea_chart.html`
+(gitignored, since it is derived from the input)
 
 ---
 
