@@ -7,7 +7,7 @@ import pytest
 
 import day20
 
-LOCKED = None
+LOCKED = (27803643063307, 1644)
 
 # The statement's nine tiles, in the order given.
 SAMPLE = """\

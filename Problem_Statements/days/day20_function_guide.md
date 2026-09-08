@@ -74,8 +74,8 @@ sea monster — the "roughness" of the water. In the example, two monsters
 appear once the image is oriented correctly, and the roughness is 273.
 
 The real input: 144 tiles, so a 12×12 arrangement. The Python answers
-are 27803643063307 and 1644, produced but **not yet submitted**;
-`LOCKED = None` until they are.
+are **27803643063307** and **1644**, both submitted and accepted;
+`LOCKED` asserts them.
 
 ## 2. Representation
 
