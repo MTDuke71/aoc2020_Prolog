@@ -43,6 +43,29 @@ work and are left in place, deliberately.
 `pyproject.toml` fences both ruff and pytest to `python/` so neither tool
 can wander into it.
 
+## Prolog companions (`prolog/`)
+
+Matt's rule, set on day 21 (2026-09-09): **"I am not going back to Prolog,
+but where it fits it should be there."** When a puzzle is a natural Prolog
+fit -- a constraint satisfaction problem where the Python solution is
+hand-written search control that Prolog supplies as the language -- a
+companion `prolog/dayNN.pl` may accompany the Python module. It is a
+companion, not a port:
+
+- The Python module stays the maintained solution and the five-name
+  contract is unchanged.
+- The companion is runnable standalone (`swipl prolog/dayNN.pl`, input
+  resolved relative to the file, optional path argument) and is verified
+  by tests in `python/tests/test_dayNN.py` that run it through `swipl`
+  and **skip** when no `swipl` is on PATH.
+- The function guide gets a section explaining what the companion shows
+  that the Python does not.
+- `prolog/` is a new directory; the frozen tree is still frozen. Do not
+  put companions in `src/`.
+
+Do not write one for every day. It is for the days where the Prolog
+version says something the Python version cannot say as plainly.
+
 ## Environment
 
 Windows, **not WSL**. Virtualenv executables are in `Scripts\`, not `bin/`.

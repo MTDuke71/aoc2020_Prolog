@@ -20,6 +20,7 @@
 | `python/bench.py` | per-phase timings, best and median of N runs |
 | `Problem_Statements/days/` | puzzle text and function guides |
 | `inputs/dayNN.txt` | puzzle inputs (gitignored — AoC asks they not be redistributed) |
+| `prolog/dayNN.pl` | occasional Prolog *companions* to a Python day, where the puzzle is a natural fit (day 21). Not a return to Prolog; the Python module stays the maintained solution, and pytest runs the companion through `swipl` when one is on PATH. |
 | `src/`, `test/`, `bench/` | **frozen Prolog.** See the note above. |
 | `tutorial/` | the Prolog tutorial phase. Also history. |
 

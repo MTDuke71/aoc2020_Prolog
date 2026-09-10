@@ -1,5 +1,9 @@
 """Day 21: Allergen Assessment."""
 
+import shutil
+import subprocess
+from pathlib import Path
+
 import pytest
 
 import day21
@@ -160,3 +164,42 @@ def test_real_every_suspect_ingredient_holds_an_allergen(real):
 
 def test_real_input_locked(check_locked):
     check_locked(day21, LOCKED)
+
+
+# ---- the Prolog companion, prolog/day21.pl -------------------------------
+# Same puzzle with part 2 as a three-clause backtracking search instead of
+# singleton peeling.  Run through swipl when one is on PATH; skipped otherwise
+# so a machine without SWI-Prolog stays green.
+
+PROLOG = Path(__file__).resolve().parents[2] / "prolog" / "day21.pl"
+
+
+@pytest.fixture(scope="module")
+def prolog():
+    swipl = shutil.which("swipl")
+    if swipl is None:
+        pytest.skip("no swipl on PATH")
+
+    def run(path: Path) -> tuple[int, str]:
+        out = subprocess.run([swipl, str(PROLOG), str(path)], capture_output=True, text=True, check=True)
+        p1, p2 = out.stdout.split()
+        return int(p1.removeprefix("part1=")), p2.removeprefix("part2=")
+
+    return run
+
+
+def test_prolog_companion_example(prolog, tmp_path):
+    sample = tmp_path / "sample.txt"
+    sample.write_text(SAMPLE)
+    assert prolog(sample) == (5, "mxmxvkd,sqjhc,fvjkl")
+
+
+def test_prolog_companion_crlf(prolog, tmp_path):
+    sample = tmp_path / "sample_crlf.txt"
+    sample.write_bytes(SAMPLE.replace("\n", "\r\n").encode())
+    assert prolog(sample) == (5, "mxmxvkd,sqjhc,fvjkl")
+
+
+def test_prolog_companion_agrees_on_the_real_input(prolog, real_input):
+    real_input(21)  # skip alongside the other real-input tests when the file is absent
+    assert prolog(day21.INPUT) == day21.solve(day21.INPUT.read_text())

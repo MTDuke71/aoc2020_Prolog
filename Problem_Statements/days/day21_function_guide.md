@@ -16,7 +16,8 @@
 > set part 1 excludes turns out to be exactly the set part 2 assigns.
 
 Source: [`python/day21.py`](../../python/day21.py) ·
-Tests: [`python/tests/test_day21.py`](../../python/tests/test_day21.py)
+Tests: [`python/tests/test_day21.py`](../../python/tests/test_day21.py) ·
+Prolog companion: [`prolog/day21.pl`](../../prolog/day21.pl), section 8
 
 ---
 
@@ -369,3 +370,66 @@ other side: the machine framing pays only when the interning is
 amortised over work that dwarfs it, and here the parse *is* most of
 the work. Shipping code stays `set[str]`, which is also what the
 statement is written in.
+
+## 8. The Prolog companion
+
+This repo's Prolog era is over and `src/` is frozen, but Matt's rule
+from this day is that where a puzzle genuinely fits Prolog, a companion
+should exist. Day 21 is the first: [`prolog/day21.pl`](../../prolog/day21.pl),
+in a new `prolog/` directory so the frozen tree stays frozen. It is not
+the maintained solution and it is not a port of the Python; it is the
+same puzzle written in a language whose execution model *is* the
+algorithm.
+
+The reason it fits is section 3's `assign`. In Python, resolving the
+candidates is hand-written search control: rounds, a forced set, a
+strike step, a "refuse to guess" branch, a duplicate-holder check. In
+Prolog, part 2 is three clauses and nothing else:
+
+```prolog
+assign([], [], _).
+assign([Allergen-Candidates|More], [Allergen-Ingredient|Solution], Used) :-
+    member(Ingredient, Candidates),
+    \+ memberchk(Ingredient, Used),
+    assign(More, Solution, [Ingredient|Used]).
+```
+
+Read against the statement: `member(Ingredient, Candidates)` is rule 1,
+one ingredient per allergen; `\+ memberchk(Ingredient, Used)` is rule
+2, no ingredient holds two. Backtracking supplies the elimination. When
+`dairy` picks an impostor and a later allergen finds every candidate
+already used, Prolog backs up and `dairy` picks again. There are no
+rounds because nothing is being peeled; the search simply does not
+return until every allergen has a distinct holder.
+
+The part that is *better* than the Python, rather than merely shorter,
+is section 4's uniqueness argument. The Python guide had to prove in
+prose that peeling never leaves an unassigned suspect and raise on
+ambiguity. In Prolog "is the assignment unique" is a question the
+program can be asked:
+
+```prolog
+?- foods('inputs/day21.txt', Fs), allergen_candidates(Fs, Ps),
+   aggregate_all(count, assign(Ps, _, []), N).
+N = 1.
+```
+
+Measured (SWI-Prolog 10.0.2, real input): the first solution of
+`assign/3` costs **63 inferences**; the whole of `solve/3`, parsing
+included, **36,892**. The search is 0.2% of the work; the rest is
+`split_string`, `atomic_list_concat` and eight `ord_intersection`s,
+the same parse-dominated shape as the Python and the Rust.
+
+One honest caveat, the same one from the Rust and bitmask sections
+turned around: generate-and-test is exponential in the worst case where
+singleton peeling is polynomial. Over eight allergens with candidate
+sets of size 1 to 4 the difference does not exist, but the Python
+version's guarantee is the stronger one on a hostile input, and that,
+plus the repo's direction, is why it is the one that ships.
+
+The companion runs standalone from anywhere (`swipl prolog/day21.pl`,
+input resolved relative to the file; an optional path argument
+substitutes another foods file), and `test_day21.py` runs it through
+`swipl` on the sample, a CRLF sample and the real input, checking the
+answers against the Python module's. Without `swipl` on PATH those
+three tests skip, so a machine without SWI-Prolog stays green.
